@@ -135,17 +135,9 @@ completionHandler:(nonnull void (^)(id _Nullable, NSError * _Nullable))completio
 
 -(void) didCompletePasswordAuthenticationStepWithError:(NSError*) error {
     if(error){
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:error.userInfo[@"__type"]
-                                                                                     message:error.userInfo[@"message"]
-                                                                              preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Retry" style:UIAlertActionStyleDefault handler:nil];
-            [alertController addAction:ok];
-            [[self.navigationController viewControllers].firstObject presentViewController:alertController
-                                                                               animated:YES
-                                                                             completion:nil];
-        });
+        if (self.completionHandler) {
+            self.completionHandler(nil, error);
+        }
     }
 }
 
